@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Teste WebSocket VanRides</title>
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+</head>
+<body>
+    <h2>WebSocket Tester - VanRides</h2>
+    <button onclick="connect()">Conectar</button>
+    <button onclick="enviarLocalizacao()">Enviar Localização</button>
+    <button onclick="disconnect()">Desconectar</button>
+    <div id="output"></div>
+
+    <script>
+        const output = document.getElementById("output");
+        const serverUrl = "wss://vanrides-backend-production.up.railway.app/ws-location";
+        const stompClient = new StompJs.Client({
+            brokerURL: serverUrl,
+            reconnectDelay: 5000,
+            debug: function (str) {
+                console.log(str);
+                output.innerHTML += str + "<br>";
+            },
+        });
+
+        stompClient.onConnect = (frame) => {
+            output.innerHTML += "✅ Conectado!<br>";
+            stompClient.subscribe("/topic/localizacao", (message) => {
+                output.innerHTML += "📥 Recebido: " + message.body + "<br>";
+            });
+        };
+
+        stompClient.onStompError = (frame) => {
+            output.innerHTML += "❌ Erro: " + frame.headers["message"] + "<br>";
+        };
+
+        function connect() {
+            stompClient.activate();
+        }
+
+        function enviarLocalizacao() {
+            const payload = {
+                latitude: -30.0346,
+                longitude: -51.2177,
+                idMotorista: 1
+            };
+            stompClient.publish({
+                destination: "/app/enviarLocalizacao",
+                body: JSON.stringify(payload)
+            });
+            output.innerHTML += "🚀 Localização enviada<br>";
+        }
+
+        function disconnect() {
+            stompClient.deactivate();
+            output.innerHTML += "🔌 Desconectado<br>";
+        }
+    </script>
+</body>
+</html>

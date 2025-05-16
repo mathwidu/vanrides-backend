@@ -12,14 +12,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/topic"); // canal de saída
-        config.setApplicationDestinationPrefixes("/app"); // canal de entrada
+        config.enableSimpleBroker("/topic"); // Canal de saída (broadcast para clientes)
+        config.setApplicationDestinationPrefixes("/app"); // Prefixo para mensagens enviadas ao servidor
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws-location")
-                .setAllowedOriginPatterns("*")
-                .withSockJS(); // permite fallback com SockJS
+                .setAllowedOriginPatterns("*") // ✅ Correção essencial para Spring Boot 3+
+                .withSockJS(); // Você pode remover se quiser trabalhar sem fallback
     }
 }
