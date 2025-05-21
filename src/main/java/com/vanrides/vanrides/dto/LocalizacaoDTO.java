@@ -4,14 +4,14 @@ public class LocalizacaoDTO {
 
     private Double latitude;
     private Double longitude;
-    private Long idMotorista;
+    private Long motoristaId; // 🔥 Campo corrigido
 
     public LocalizacaoDTO() {}
 
-    public LocalizacaoDTO(Double latitude, Double longitude, Long idMotorista) {
+    public LocalizacaoDTO(Double latitude, Double longitude, Long motoristaId) {
         this.latitude = latitude;
         this.longitude = longitude;
-        this.idMotorista = idMotorista;
+        this.motoristaId = motoristaId;
     }
 
     public Double getLatitude() {
@@ -30,11 +30,11 @@ public class LocalizacaoDTO {
         this.longitude = longitude;
     }
 
-    public Long getIdMotorista() {
-        return idMotorista;
+    public Long getMotoristaId() { // 🔥 Getter corrigido
+        return motoristaId;
     }
 
-    public void setIdMotorista(Long idMotorista) {
-        this.idMotorista = idMotorista;
+    public void setMotoristaId(Long motoristaId) { // 🔥 Setter corrigido
+        this.motoristaId = motoristaId;
     }
 }

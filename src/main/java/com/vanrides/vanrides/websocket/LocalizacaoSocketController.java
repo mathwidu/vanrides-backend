@@ -29,13 +29,13 @@ public class LocalizacaoSocketController {
     System.out.println("[DEBUG] 📥 Recebendo localização via WebSocket:");
     System.out.println("[DEBUG] Latitude: " + localizacao.getLatitude());
     System.out.println("[DEBUG] Longitude: " + localizacao.getLongitude());
-    System.out.println("[DEBUG] ID do Motorista recebido: " + localizacao.getIdMotorista());
+    System.out.println("[DEBUG] ID do Motorista recebido: " + localizacao.getMotoristaId());
 
     // Verificar se o motorista existe
-    Motorista motorista = motoristaRepository.findById(localizacao.getIdMotorista())
+    Motorista motorista = motoristaRepository.findById(localizacao.getMotoristaId())
             .orElseThrow(() -> {
-                System.out.println("[DEBUG] ❌ Motorista NÃO encontrado com ID: " + localizacao.getIdMotorista());
-                return new RuntimeException("Motorista não encontrado com ID: " + localizacao.getIdMotorista());
+                System.out.println("[DEBUG] ❌ Motorista NÃO encontrado com ID: " + localizacao.getMotoristaId());
+                return new RuntimeException("Motorista não encontrado com ID: " + localizacao.getMotoristaId());
             });
 
     System.out.println("[DEBUG] ✅ Motorista encontrado: " + motorista.getNome());
