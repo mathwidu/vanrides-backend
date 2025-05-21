@@ -26,26 +26,36 @@ public class LocalizacaoSocketController {
 
     @MessageMapping("/enviarLocalizacao")
     public void receberLocalizacao(LocalizacaoDTO localizacao) {
-        System.out.println("Localização recebida via WebSocket: " +
-                localizacao.getLatitude() + ", " +
-                localizacao.getLongitude() + ", " +
-                "Motorista ID: " + localizacao.getIdMotorista());
+    System.out.println("[DEBUG] 📥 Recebendo localização via WebSocket:");
+    System.out.println("[DEBUG] Latitude: " + localizacao.getLatitude());
+    System.out.println("[DEBUG] Longitude: " + localizacao.getLongitude());
+    System.out.println("[DEBUG] ID do Motorista recebido: " + localizacao.getIdMotorista());
 
-        // 🔥 Buscar o motorista no banco de dados
-        Motorista motorista = motoristaRepository.findById(localizacao.getIdMotorista())
-                .orElseThrow(() -> new RuntimeException("Motorista não encontrado com ID: " + localizacao.getIdMotorista()));
+    // Verificar se o motorista existe
+    Motorista motorista = motoristaRepository.findById(localizacao.getIdMotorista())
+            .orElseThrow(() -> {
+                System.out.println("[DEBUG] ❌ Motorista NÃO encontrado com ID: " + localizacao.getIdMotorista());
+                return new RuntimeException("Motorista não encontrado com ID: " + localizacao.getIdMotorista());
+            });
 
-        // 🔥 Criar entidade de localização
-        LocalizacaoMotorista entidade = new LocalizacaoMotorista();
-        entidade.setLatitude(localizacao.getLatitude());
-        entidade.setLongitude(localizacao.getLongitude());
-        entidade.setDataHora(LocalDateTime.now()); // Grava a data e hora atual
-        entidade.setMotorista(motorista); // Associa o motorista corretamente
+    System.out.println("[DEBUG] ✅ Motorista encontrado: " + motorista.getNome());
 
-        // 🔥 Salvar no banco
-        localizacaoMotoristaRepository.save(entidade);
+    // Criar entidade de localização
+    LocalizacaoMotorista entidade = new LocalizacaoMotorista();
+    entidade.setLatitude(localizacao.getLatitude());
+    entidade.setLongitude(localizacao.getLongitude());
+    entidade.setDataHora(LocalDateTime.now());
+    entidade.setMotorista(motorista);
 
-        // 🔥 Enviar localização para todos os inscritos no tópico
-        messagingTemplate.convertAndSend("/topic/localizacao", localizacao);
-    }
+    localizacaoMotoristaRepository.save(entidade);
+
+    System.out.println("[DEBUG] 💾 Localização salva no banco para o motorista ID: " + motorista.getId());
+
+    messagingTemplate.convertAndSend("/topic/localizacao", localizacao);
+
+    System.out.println("[DEBUG] 📤 Localização enviada no tópico /topic/localizacao");
+}
+
+
+    
 }
