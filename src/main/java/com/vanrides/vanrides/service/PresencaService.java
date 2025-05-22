@@ -23,14 +23,6 @@ public class PresencaService {
         return presencaRepository.findAll();
     }
 
-    public Optional<Presenca> buscarPresencaPorId(Long id) {
-        return presencaRepository.findById(id);
-    }
-
-    public void deletarPresenca(Long id) {
-        presencaRepository.deleteById(id);
-    }
-
     public List<Presenca> listarPresencasPorPassageiro(Long passageiroId) {
         return presencaRepository.findByPassageiroId(passageiroId);
     }
@@ -39,8 +31,19 @@ public class PresencaService {
         return presencaRepository.findByDataPresenca(dataPresenca);
     }
 
-    // ✅ NOVO: verifica se já existe presença para o passageiro no dia
-    public boolean jaExistePresenca(Long passageiroId, LocalDate data) {
-        return !presencaRepository.findByPassageiroIdAndDataPresenca(passageiroId, data).isEmpty();
+    public List<Presenca> listarPresencasPorMotoristaEData(Long motoristaId, LocalDate data) {
+        return presencaRepository.findByMotoristaIdAndData(motoristaId, data);
+    }
+
+    public Optional<Presenca> buscarPresencaPorId(Long id) {
+        return presencaRepository.findById(id);
+    }
+
+    public void deletarPresenca(Long id) {
+        presencaRepository.deleteById(id);
+    }
+
+    public boolean jaExistePresenca(Long passageiroId, LocalDate dataPresenca) {
+        return presencaRepository.existsByPassageiroIdAndDataPresenca(passageiroId, dataPresenca);
     }
 }
