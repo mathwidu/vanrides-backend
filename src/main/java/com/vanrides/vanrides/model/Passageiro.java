@@ -20,7 +20,11 @@ public class Passageiro {
     private String telefone;
 
     @Column(nullable = false)
-    private String senha; // ✅ Novo campo senha adicionado
+    private String senha; 
+
+    @ManyToOne
+    @JoinColumn(name = "motorista_id")
+    private Motorista motorista;
 
     // Construtor vazio obrigatório para o JPA
     public Passageiro() {}
