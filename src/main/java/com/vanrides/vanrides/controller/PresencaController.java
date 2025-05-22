@@ -18,12 +18,11 @@ public class PresencaController {
     @Autowired
     private PresencaService presencaService;
 
-    // ✅ Atualizado para bloquear duplicidade
     @PostMapping
     public ResponseEntity<?> criarPresenca(@RequestBody Presenca presenca) {
         boolean existe = presencaService.jaExistePresenca(
-            presenca.getPassageiro().getId(),
-            presenca.getDataPresenca()
+                presenca.getPassageiro().getId(),
+                presenca.getDataPresenca()
         );
 
         if (existe) {
@@ -48,9 +47,17 @@ public class PresencaController {
 
     @GetMapping("/data")
     public ResponseEntity<List<Presenca>> listarPresencasPorData(@RequestParam("data")
-                                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                                                 LocalDate dataPresenca) {
+                                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                  LocalDate dataPresenca) {
         List<Presenca> presencas = presencaService.listarPresencasPorData(dataPresenca);
+        return ResponseEntity.ok(presencas);
+    }
+
+    @GetMapping("/motorista/{motoristaId}")
+    public ResponseEntity<List<Presenca>> listarPresencasPorMotoristaEData(
+            @PathVariable Long motoristaId,
+            @RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+        List<Presenca> presencas = presencaService.listarPresencasPorMotoristaEData(motoristaId, data);
         return ResponseEntity.ok(presencas);
     }
 
