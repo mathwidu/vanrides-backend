@@ -16,8 +16,7 @@ public interface PresencaRepository extends JpaRepository<Presenca, Long> {
 
     boolean existsByPassageiroIdAndDataPresenca(Long passageiroId, LocalDate dataPresenca);
 
-    @Query("SELECT p FROM Presenca p WHERE p.dataPresenca = :data AND p.passageiro.id IN " +
-            "(SELECT pa.id FROM Passageiro pa WHERE pa.motorista.id = :motoristaId)")
+    @Query("SELECT p FROM Presenca p WHERE p.dataPresenca = :data AND p.passageiro.motorista.id = :motoristaId")
     List<Presenca> findByMotoristaIdAndData(@Param("motoristaId") Long motoristaId,
                                              @Param("data") LocalDate data);
 }

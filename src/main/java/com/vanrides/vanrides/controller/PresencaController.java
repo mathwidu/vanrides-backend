@@ -35,30 +35,25 @@ public class PresencaController {
 
     @GetMapping
     public ResponseEntity<List<Presenca>> listarPresencas() {
-        List<Presenca> presencas = presencaService.listarTodasPresencas();
-        return ResponseEntity.ok(presencas);
+        return ResponseEntity.ok(presencaService.listarTodasPresencas());
     }
 
     @GetMapping("/passageiro/{passageiroId}")
-    public ResponseEntity<List<Presenca>> listarPresencasPorPassageiro(@PathVariable Long passageiroId) {
-        List<Presenca> presencas = presencaService.listarPresencasPorPassageiro(passageiroId);
-        return ResponseEntity.ok(presencas);
+    public ResponseEntity<List<Presenca>> listarPorPassageiro(@PathVariable Long passageiroId) {
+        return ResponseEntity.ok(presencaService.listarPresencasPorPassageiro(passageiroId));
     }
 
     @GetMapping("/data")
-    public ResponseEntity<List<Presenca>> listarPresencasPorData(@RequestParam("data")
-                                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                                                  LocalDate dataPresenca) {
-        List<Presenca> presencas = presencaService.listarPresencasPorData(dataPresenca);
-        return ResponseEntity.ok(presencas);
+    public ResponseEntity<List<Presenca>> listarPorData(@RequestParam("data")
+                                                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataPresenca) {
+        return ResponseEntity.ok(presencaService.listarPresencasPorData(dataPresenca));
     }
 
     @GetMapping("/motorista/{motoristaId}")
-    public ResponseEntity<List<Presenca>> listarPresencasPorMotoristaEData(
+    public ResponseEntity<List<Presenca>> listarPorMotoristaEData(
             @PathVariable Long motoristaId,
             @RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
-        List<Presenca> presencas = presencaService.listarPresencasPorMotoristaEData(motoristaId, data);
-        return ResponseEntity.ok(presencas);
+        return ResponseEntity.ok(presencaService.listarPresencasPorMotoristaEData(motoristaId, data));
     }
 
     @DeleteMapping("/{id}")
