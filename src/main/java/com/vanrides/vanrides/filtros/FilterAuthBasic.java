@@ -33,12 +33,19 @@ public class FilterAuthBasic extends OncePerRequestFilter {
         String path = request.getServletPath();
         String method = request.getMethod();
 
-        // Permite POST sem autenticação para cadastro inicial
+        // 🔓 Permitir POST sem autenticação para cadastro de passageiro e motorista
         if ((path.equals("/passageiros") || path.equals("/motoristas")) && method.equals("POST")) {
             chain.doFilter(request, response);
             return;
         }
 
+        // 🔓 Permitir GET sem autenticação para listar motoristas
+        if (path.equals("/motoristas") && method.equals("GET")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        // 🔒 Protege os demais endpoints
         if (path.startsWith("/presencas") || path.startsWith("/passageiros") || path.startsWith("/motoristas")) {
             String authHeader = request.getHeader("Authorization");
             if (authHeader == null || !authHeader.startsWith("Basic ")) {
