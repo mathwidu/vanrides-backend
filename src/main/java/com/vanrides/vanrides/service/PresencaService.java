@@ -47,3 +47,4 @@ public class PresencaService {
         return presencaRepository.existsByPassageiroIdAndDataPresenca(passageiroId, dataPresenca);
     }
 }
+ 

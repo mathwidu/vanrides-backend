@@ -15,29 +15,56 @@ public class PassageiroService {
     @Autowired
     private PassageiroRepository passageiroRepository;
 
-    // Salva um novo passageiro com a senha criptografada
+    @Autowired
+    private GeocodingService geocodingService;
+
+    // ✅ Salvar novo passageiro (com senha criptografada e geolocalização)
     public Passageiro salvarPassageiro(Passageiro passageiro) {
-        String senhaCriptografada = BCrypt.withDefaults().hashToString(12, passageiro.getSenha().toCharArray());
-        passageiro.setSenha(senhaCriptografada);
+        // 🔒 Criptografa a senha apenas se ela não estiver criptografada
+        if (!passageiro.getSenha().startsWith("$2a$")) {
+            String senhaCriptografada = BCrypt.withDefaults().hashToString(12, passageiro.getSenha().toCharArray());
+            passageiro.setSenha(senhaCriptografada);
+        }
+
+        // 🌎 Monta o endereço completo, agora incluindo o bairro
+        String enderecoCompleto = passageiro.getEndereco() + ", "
+                                + passageiro.getBairro() + ", "
+                                + passageiro.getCidade() + ", "
+                                + passageiro.getEstado() + ", "
+                                + passageiro.getCep();
+
+        try {
+            // 🚀 Faz a busca das coordenadas
+            GeocodingService.Coordenadas coordenadas = geocodingService.buscarCoordenadas(enderecoCompleto);
+
+            if (coordenadas != null) {
+                passageiro.setLatitude(coordenadas.getLatitude());
+                passageiro.setLongitude(coordenadas.getLongitude());
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao buscar coordenadas: " + e.getMessage());
+            // ⚠️ Aqui você pode decidir se salva sem coordenadas ou lança um erro
+        }
+
         return passageiroRepository.save(passageiro);
     }
 
-    // Retorna todos os passageiros
+    // ✅ Listar todos os passageiros
     public List<Passageiro> listarTodosPassageiros() {
         return passageiroRepository.findAll();
     }
 
-    // Busca um passageiro por ID
+    // ✅ Buscar passageiro por ID
     public Optional<Passageiro> buscarPassageiroPorId(Long id) {
         return passageiroRepository.findById(id);
     }
 
-    // Deleta um passageiro pelo ID
+    // ✅ Deletar passageiro
     public void deletarPassageiro(Long id) {
         passageiroRepository.deleteById(id);
     }
 
-    // Busca um passageiro pelo e-mail
+    // ✅ Buscar por e-mail
     public Passageiro buscarPorEmail(String email) {
         return passageiroRepository.findByEmail(email);
     }
