@@ -25,13 +25,13 @@
 
 	<dependencies>
 
-		<!-- 🚀 Spring Boot Web REST -->
+		<!-- Spring Boot Web REST -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<!-- 🚀 JPA + PostgreSQL -->
+		<!-- JPA + PostgreSQL -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -42,27 +42,27 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- 🚀 WebSocket -->
+		<!-- WebSocket -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-websocket</artifactId>
 		</dependency>
 
-		<!-- 🔐 BCrypt (leve, sem usar Spring Security) -->
+		<!-- BCrypt (leve, sem usar Spring Security) -->
 		<dependency>
 			<groupId>at.favre.lib</groupId>
 			<artifactId>bcrypt</artifactId>
 			<version>0.9.0</version>
 		</dependency>
 
-		<!-- 🔧 Manipulação de JSON (opcional) -->
+		<!-- Manipulação de JSON (opcional) -->
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20230227</version>
 		</dependency>
 
-		<!-- 🧪 Testes -->
+		<!-- Testes -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
